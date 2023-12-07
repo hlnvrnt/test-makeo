@@ -16,7 +16,6 @@ const Form = () => {
     setContact({ name: "", email: "", message: "" });
   };
 
-  console.log(submittedContact);
   return (
     <div className="form-container">
       <h1>Formulaire de contact</h1>
@@ -61,7 +60,7 @@ const Form = () => {
             </div>
           </div>
         </form>
-        {submittedContact.length > 0 && (
+       
           <div className="submitted-contact">
             <table>
               <thead>
@@ -71,6 +70,13 @@ const Form = () => {
                   <th colspan="1">Message</th>
                 </tr>
               </thead>
+              <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+              </tbody>
               {submittedContact.map((info, index) => (
                 <tbody key={index}>
                   <tr>
@@ -82,7 +88,6 @@ const Form = () => {
               ))}
             </table>
           </div>
-        )}
       </div>
     </div>
   );
