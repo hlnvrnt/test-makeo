@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Form = () => {
   const [contact, setContact] = useState({
@@ -9,12 +10,34 @@ const Form = () => {
   });
   const [submittedContact, setSubmittedContact] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [tableContact, setTableContact] = useState([]);
 
-    setSubmittedContact([...submittedContact, contact]);
-    setContact({ name: "", email: "", message: "" });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:5000/api/contacts", contact);
+      setSubmittedContact([...submittedContact, contact]);
+      setContact({ name: "", email: "", message: "" });
+      const response = await axios.get("http://localhost:5000/api/contacts");
+      setTableContact(response.data); 
+    } catch (e) {
+      console.log(e);
+    }
   };
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/contacts");
+      setTableContact(response.data);
+    } catch (error) {
+      console.error(error);
+    }}
+    fetchData();
+  }, [])
+
+
 
   return (
     <div className="form-container">
@@ -25,7 +48,7 @@ const Form = () => {
             <div>
               <input
                 type="text"
-                name="name"
+                name="names"
                 placeholder="Nom et Prénom"
                 value={contact.name}
                 onChange={(e) =>
@@ -77,7 +100,7 @@ const Form = () => {
                     <td></td>
                 </tr>
               </tbody>
-              {submittedContact.map((info, index) => (
+              {tableContact.map((info, index) => (
                 <tbody key={index}>
                   <tr>
                     <td>{info.name}</td>
